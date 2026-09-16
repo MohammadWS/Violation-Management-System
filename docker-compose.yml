@@ -12,6 +12,28 @@ services:
       - sqlserver-data:/var/opt/mssql
       - ./sql-scripts:/docker-entrypoint-initdb.d
     restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "/opt/mssql-tools18/bin/sqlcmd", "-C", "-S", "localhost", "-U", "sa", "-P", "vms-mssql-PWD!", "-Q", "SELECT 1" ]
+      interval: 5s
+      retries: 10
 
+  init-db:
+    image: mcr.microsoft.com/mssql-tools
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    entrypoint: >
+      /opt/mssql-tools/bin/sqlcmd -C -S sqlserver -U sa -P "vms-mssql-PWD!"
+      -Q "IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = 'vmsdb') CREATE DATABASE vmsdb"
+
+  app:
+    build: .
+    ports:
+      - "12002:12002"
+    depends_on:
+      - sqlserver
+      - init-db
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
 volumes:
   sqlserver-data:
