@@ -1,0 +1,17 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver-vms
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "vms-mssql-PWD!"
+      MSSQL_PID: "Developer"
+    ports:
+      - "12001:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+      - ./sql-scripts:/docker-entrypoint-initdb.d
+    restart: unless-stopped
+
+volumes:
+  sqlserver-data:
