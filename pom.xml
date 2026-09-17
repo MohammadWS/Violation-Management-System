@@ -89,6 +89,7 @@
     </dependencies>
 
     <build>
+        <!--<finalName>Violation-Management-System</finalName>-->
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
