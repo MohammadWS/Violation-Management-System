@@ -16,6 +16,14 @@ public class UserControl {
 
     @PostMapping("/register")
     public User register(@RequestBody User user) {
+
         return userService.register(user);
     }
+
+    @PostMapping("/login")
+    public String login(@RequestBody User user) {
+        System.out.println(user);
+        return userService.verify(user);
+    }
+
 }
