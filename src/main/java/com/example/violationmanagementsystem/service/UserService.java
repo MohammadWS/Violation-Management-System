@@ -9,11 +9,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
     @Autowired
-    private UserRepo repo;
+    private UserRepo userRepo;
 
     @Autowired
     AuthenticationManager authenticationManager;
@@ -26,7 +28,7 @@ public class UserService {
 
     public User register(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        return this.repo.save(user);
+        return this.userRepo.save(user);
     }
 
     public String verify(User user) {
@@ -39,5 +41,9 @@ public class UserService {
             return jwtService.generateToken(user.getUsername());
 
         return "fail";
+    }
+
+    public List<User> getAllUsers() {
+        return this.userRepo.findAll();
     }
 }
