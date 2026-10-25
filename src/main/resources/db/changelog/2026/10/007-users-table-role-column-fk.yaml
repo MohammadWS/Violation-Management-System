@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      author: MohammadWS
+      id: 007-users-table-role-column-fk
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - foreignKeyConstraintExists:
+                foreignKeyTableName: users
+                foreignKeyName: fk_users_role
+      changes:
+        - addForeignKeyConstraint:
+            constraintName: fk_users_role
+            baseTableName: users
+            baseColumnNames: role_id
+            referencedTableName: roles
+            referencedColumnNames: id
+        - createIndex:
+            tableName: users
+            indexName: ix_users_role_id
+            columns:
+              - column:
+                  name: role_id
+      rollback:
+        - dropForeignKeyConstraint:
+            constraintName: fk_users_role
+            baseTableName: users
+        - dropIndex:
+            indexName: ix_users_role_id
+            tableName: users

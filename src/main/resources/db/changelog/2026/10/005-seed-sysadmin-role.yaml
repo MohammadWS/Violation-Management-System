@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      author: MohammadWS
+      id: 005-seed-sysadmin-role
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM roles WHERE code = 100
+      changes:
+        - insert:
+            tableName: roles
+            columns:
+              - column: { name: code, value: 100 }
+              - column: { name: name_ar, value: مدير النظام }
+              - column: { name: name_en, value: System Admin }
+              - column: { name: level, valueNumeric: 21 }
+              - column: { name: active, valueBoolean: true }
+              - column: { name: code, value: 100 }
+      rollback:
+        - delete:
+            tableName: roles
+            where: code = 100

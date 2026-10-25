@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      author: MohammadWS
+      id: 008-users-table-add-role-column
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - columnExists:
+                tableName: users
+                columnName: role_id
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: role_id
+                  type: bigint
+      rollback:
+        - dropColumn:
+            tableName: users
+            columnName: role_id

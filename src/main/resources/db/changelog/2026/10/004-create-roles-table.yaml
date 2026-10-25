@@ -1,0 +1,64 @@
+databaseChangeLog:
+  - changeSet:
+      author: MohammadWS
+      id: 004-create-roles-table
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: roles
+      changes:
+        - createTable:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name_ar
+                  type: NVARCHAR(50)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: name_en
+                  type: VARCHAR(50)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: level
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: active
+                  type: BIT
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: true
+              - column:
+                  name: code
+                  type: bigint
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: DATETIME2
+                  defaultValueComputed: GETDATE()
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: DATETIME2
+                  defaultValueComputed: GETDATE()
+                  constraints:
+                    nullable: false
+      rollback:
+        - dropTable:
+            tableName: roles

@@ -2,6 +2,11 @@ databaseChangeLog:
   - changeSet:
       author: MohammadWS
       id: 001-create-users-table
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: users
       changes:
         - createTable:
             tableName: users
@@ -53,7 +58,6 @@ databaseChangeLog:
                   defaultValueComputed: GETDATE()
                   constraints:
                     nullable: false
-
         - createIndex:
             indexName: idx_users_username
             tableName: users

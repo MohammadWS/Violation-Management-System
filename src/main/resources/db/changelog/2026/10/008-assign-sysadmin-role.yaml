@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      author: MohammadWS
+      id: 008-assign-sysadmin-role
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 1
+            sql: SELECT COUNT(*) FROM users WHERE username = 'sysadmin' AND role_id IS NULL
+      changes:
+        - update:
+            tableName: users
+            where: username = 'sysadmin'
+            columns:
+              - column:
+                  name: role_id
+                  valueComputed: (SELECT id FROM roles WHERE code = 100)
+              - column:
+                  name: updated_at
+                  valueComputed: CURRENT_TIMESTAMP
+      rollback:
+        - update:
+            tableName: users
+            where: username = 'sysadmin'
+            columns:
+              - column:
+                  name: role_id
+                  valueComputed: "NULL"
