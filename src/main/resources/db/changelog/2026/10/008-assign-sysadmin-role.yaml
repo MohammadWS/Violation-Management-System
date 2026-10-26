@@ -14,7 +14,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: role_id
-                  valueComputed: (SELECT id FROM roles WHERE code = 100)
+                  valueComputed: (SELECT id FROM roles WHERE code = 'SYSTEM_ADMIN')
               - column:
                   name: updated_at
                   valueComputed: CURRENT_TIMESTAMP

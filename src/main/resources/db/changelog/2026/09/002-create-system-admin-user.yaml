@@ -13,6 +13,7 @@ databaseChangeLog:
             columns:
               - column: { name: username, value: 'sysadmin' }
               - column: { name: password, value: 'sysadmin' }
+              - column: { name: national_id, value: '1000000000' }
               - column: { name: email, value: 'sysadmin@mail.com' }
               - column: { name: enabled, value: true }
               - column: { name: created_at, valueComputed: CURRENT_TIMESTAMP }

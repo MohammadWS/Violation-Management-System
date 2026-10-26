@@ -1,5 +1,6 @@
 package com.example.violationmanagementsystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 @Entity
@@ -9,17 +10,32 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false,unique = true,length = 50)
+    @Column(nullable = false, unique = true, length = 10)
+    private String national_id;
+
+    @Column(nullable = false, unique = true, length = 50)
     private String username;
 
-    @Column(nullable = false,length = 255)
+    @Column(nullable = false, length = 255)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    @Column(nullable = false,unique = true,length = 100)
+    @Column(nullable = false, unique = true, length = 100)
     private String email;
-
-    @Column(nullable = false)
+    @Column(name = "enabled", nullable = false)
     private boolean enabled;
+    @Column(name = "account_non_locked", nullable = false, unique = true, length = 100)
+    private boolean accountNonLocked;
+
+    @OneToOne(
+            cascade = {CascadeType.DETACH,
+                    CascadeType.MERGE,
+                    CascadeType.PERSIST,
+                    CascadeType.REFRESH,}
+            , fetch = FetchType.EAGER
+    )
+    @JoinColumn(name = "role_id")
+    private Role role;
 
     public Long getId() {
         return id;
@@ -53,12 +69,36 @@ public class User {
         this.email = email;
     }
 
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public String getNational_id() {
+        return national_id;
+    }
+
+    public void setNational_id(String national_id) {
+        this.national_id = national_id;
+    }
+
     public boolean isEnabled() {
         return enabled;
     }
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public boolean isAccountNonLocked() {
+        return accountNonLocked;
+    }
+
+    public void setAccountNonLocked(boolean accountNonLocked) {
+        this.accountNonLocked = accountNonLocked;
     }
 
     public User() {
@@ -75,6 +115,7 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
+                ", national_id='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", enabled=" + enabled +

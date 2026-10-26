@@ -1,7 +1,6 @@
-package com.example.violationmanagementsystem.service;
+package com.example.violationmanagementsystem.security;
 
 import com.example.violationmanagementsystem.entity.User;
-import com.example.violationmanagementsystem.entity.UserPrincipal;
 import com.example.violationmanagementsystem.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,8 +8,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
-public class CustomUserDetailsService implements UserDetailsService {
+public class AppUserDetailsService implements UserDetailsService {
 
     @Autowired
     private UserRepo userRepo;
@@ -18,13 +19,12 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        User user = userRepo.findUserByUsername(username);
+        Optional<User> user = userRepo.findUserByUsername(username);
 
-        if (user == null){
-            System.out.println("User not found");
+        if (user.isEmpty()) {
             throw new UsernameNotFoundException("user not found");
         }
 
-        return new UserPrincipal(user);
+        return new AppUserDetails(user.orElse(null));
     }
 }

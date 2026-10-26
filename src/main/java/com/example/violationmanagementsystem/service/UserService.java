@@ -2,11 +2,12 @@ package com.example.violationmanagementsystem.service;
 
 import com.example.violationmanagementsystem.entity.User;
 import com.example.violationmanagementsystem.repo.UserRepo;
+import com.example.violationmanagementsystem.security.JWTService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,11 +24,11 @@ public class UserService {
     @Autowired
     JWTService jwtService;
 
-
-    private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(12);
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     public User register(User user) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return this.userRepo.save(user);
     }
 

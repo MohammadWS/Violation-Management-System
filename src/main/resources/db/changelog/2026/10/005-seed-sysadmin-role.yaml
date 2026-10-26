@@ -16,7 +16,7 @@ databaseChangeLog:
               - column: { name: name_en, value: System Admin }
               - column: { name: level, valueNumeric: 21 }
               - column: { name: active, valueBoolean: true }
-              - column: { name: code, value: 100 }
+              - column: { name: code, value: SYSTEM_ADMIN }
       rollback:
         - delete:
             tableName: roles

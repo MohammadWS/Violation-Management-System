@@ -1,7 +1,5 @@
-package com.example.violationmanagementsystem.config;
+package com.example.violationmanagementsystem.security;
 
-import com.example.violationmanagementsystem.service.CustomUserDetailsService;
-import com.example.violationmanagementsystem.service.JWTService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -43,7 +41,7 @@ public class JwtFilter extends OncePerRequestFilter {
         if (username != null
                 && SecurityContextHolder.getContext().getAuthentication() == null
         ) {
-            UserDetails userDetails = context.getBean(CustomUserDetailsService.class).loadUserByUsername(username);
+            UserDetails userDetails = context.getBean(AppUserDetailsService.class).loadUserByUsername(username);
 
             if (jwtService.validateToken(token, userDetails)) {
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(

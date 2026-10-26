@@ -1,10 +1,8 @@
-package com.example.violationmanagementsystem.rest;
+package com.example.violationmanagementsystem.controller;
 
 import com.example.violationmanagementsystem.entity.User;
-import com.example.violationmanagementsystem.repo.UserRepo;
 import com.example.violationmanagementsystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
