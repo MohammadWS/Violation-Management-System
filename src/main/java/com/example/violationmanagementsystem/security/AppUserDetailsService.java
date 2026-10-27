@@ -27,4 +27,14 @@ public class AppUserDetailsService implements UserDetailsService {
 
         return new AppUserDetails(user.orElse(null));
     }
+
+    public AppUserDetails loadUserById(Long id) {
+        Optional<User> user = userRepo.findById(id);
+
+        if (user.isEmpty()) {
+            throw new UsernameNotFoundException("user not found");
+        }
+
+        return new AppUserDetails(user.orElse(null));
+    }
 }

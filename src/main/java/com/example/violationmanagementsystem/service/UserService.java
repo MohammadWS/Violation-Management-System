@@ -2,6 +2,7 @@ package com.example.violationmanagementsystem.service;
 
 import com.example.violationmanagementsystem.entity.User;
 import com.example.violationmanagementsystem.repo.UserRepo;
+import com.example.violationmanagementsystem.security.AppUserDetails;
 import com.example.violationmanagementsystem.security.JWTService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -38,10 +39,9 @@ public class UserService {
                         UsernamePasswordAuthenticationToken.unauthenticated(
                                 user.getUsername(), user.getPassword()
                         ));
-        if (authentication.isAuthenticated())
-            return jwtService.generateToken(user.getUsername());
 
-        return "fail";
+        AppUserDetails appUserDetails = (AppUserDetails) authentication.getPrincipal();
+        return jwtService.generateToken(appUserDetails.getId());
     }
 
     public List<User> getAllUsers() {
