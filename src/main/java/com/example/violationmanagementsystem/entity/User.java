@@ -24,10 +24,10 @@ public class User {
     private String email;
     @Column(name = "enabled", nullable = false)
     private boolean enabled;
-    @Column(name = "account_non_locked", nullable = false, unique = true, length = 100)
+    @Column(name = "account_non_locked", nullable = false)
     private boolean accountNonLocked;
 
-    @OneToOne(
+    @ManyToOne(
             cascade = {CascadeType.DETACH,
                     CascadeType.MERGE,
                     CascadeType.PERSIST,
@@ -116,7 +116,6 @@ public class User {
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", national_id='" + username + '\'' +
-                ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", enabled=" + enabled +
                 '}';

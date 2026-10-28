@@ -20,15 +20,8 @@ public class JWTService {
     @Value("${jwt.secret}")
     private String secretKey;
 
-    public JWTService() {
-        try {
-            KeyGenerator keyGen = KeyGenerator.getInstance("HmacSHA256");
-            SecretKey sk = keyGen.generateKey();
-            secretKey = Base64.getEncoder().encodeToString(sk.getEncoded());
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    @Value("${jwt.expiration-ms:3600000}")
+    private long expirationMs;
 
     public String generateToken(Long userId) {
 
@@ -43,7 +36,7 @@ public class JWTService {
                 .audience().add("VMS").and()
                 .id(UUID.randomUUID().toString())
                 .issuedAt(now)
-                .expiration(new Date(now.getTime() + 1000 * 60 * 60))
+                .expiration(new Date(now.getTime() + expirationMs))
                 .and()
                 .signWith(getKey())
                 .compact();
@@ -68,6 +61,8 @@ public class JWTService {
     private Claims extarctAllClaims(String token) {
         return Jwts.parser()
                 .verifyWith(getKey())
+                .requireIssuer("VMS")
+                .requireAudience("VMS")
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
@@ -76,6 +71,10 @@ public class JWTService {
     public boolean validateToken(String token, AppUserDetails userDetails) {
         final Long userId = extractUserId(token);
         return (userId.equals(userDetails.getId()) && !isTokenExpired(token));
+    }
+
+    public long getExpirationSeconds() {
+        return expirationMs / 1000;
     }
 
     private boolean isTokenExpired(String token) {

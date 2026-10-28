@@ -1,5 +1,6 @@
 package com.example.violationmanagementsystem.security;
 
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,6 +10,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -33,25 +35,38 @@ public class JwtFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader("Authorization");
         String token = null;
         Long userId = null;
+        try {
+            if (authHeader != null && authHeader.startsWith("Bearer ")) {
 
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            token = authHeader.substring(7);
-            userId = jwtService.extractUserId(token);
-        }
-        if (userId != null
-                && SecurityContextHolder.getContext().getAuthentication() == null
-        ) {
-            AppUserDetails appUserDetails = context.getBean(AppUserDetailsService.class).loadUserById(userId);
 
-            if (jwtService.validateToken(token, appUserDetails)) {
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                        appUserDetails,
-                        null,
-                        appUserDetails.getAuthorities()
-                );
-                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                token = authHeader.substring(7);
+                userId = jwtService.extractUserId(token);
             }
+            if (userId != null
+                    && SecurityContextHolder.getContext().getAuthentication() == null
+            ) {
+                AppUserDetails appUserDetails = context.getBean(AppUserDetailsService.class).loadUserById(userId);
+
+                if (appUserDetails.isEnabled()) {
+
+                }
+
+                if (appUserDetails.isEnabled()
+                        && appUserDetails.isAccountNonLocked()
+                        && jwtService.validateToken(token, appUserDetails)) {
+                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                            appUserDetails,
+                            null,
+                            appUserDetails.getAuthorities()
+                    );
+                    authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                }
+            }
+
+        } catch (JwtException | IllegalArgumentException | UsernameNotFoundException e) {
+            logger.debug("JWT rejected: " + e.getMessage());
+
         }
         filterChain.doFilter(request, response);
     }
