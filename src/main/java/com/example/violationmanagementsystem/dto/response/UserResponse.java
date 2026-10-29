@@ -8,7 +8,7 @@ public record UserResponse(Long id, String username, String email, String nation
                 u.getId(),
                 u.getUsername(),
                 u.getEmail(),
-                u.getNational_id(),
+                u.getNationalId(),
                 u.getRole() != null ? u.getRole().getCode() : null);
     }
 }

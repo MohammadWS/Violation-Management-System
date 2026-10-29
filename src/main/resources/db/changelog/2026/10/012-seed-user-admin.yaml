@@ -1,0 +1,24 @@
+databaseChangeLog:
+  - changeSet:
+      author: MohammadWS
+      id: 012-seed-user-admin
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM users WHERE national_id = 1000000001
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column: { name: username, value: 'admin' }
+              - column: { name: password, value: 'admin' }
+              - column: { name: national_id, value: '1000000001' }
+              - column: { name: email, value: 'admin@mail.com' }
+              - column: { name: enabled, value: true }
+              - column: { name: created_at, valueComputed: CURRENT_TIMESTAMP }
+              - column: { name: updated_at, valueComputed: CURRENT_TIMESTAMP }
+      rollback:
+        - delete:
+            tableName: users
+            where: national_id = 1000000001

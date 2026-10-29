@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      author: MohammadWS
+      id: 013-encrypt-admin-user
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 1
+            sql: SELECT COUNT(*) FROM users WHERE username = 'admin' AND (password IS NULL OR NOT (password LIKE '$2_$__$%' AND LEN(password) = 60))
+      changes:
+        - update:
+            tableName: users
+            columns:
+              - column:
+                  name: password
+                  value: '${admin.password.hash}'
+            where: username = 'admin'

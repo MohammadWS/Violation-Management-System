@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      author: MohammadWS
+      id: 009-seed-roles
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM roles WHERE code = 'ADMIN'
+      changes:
+        - insert:
+            tableName: roles
+            columns:
+              - column: { name: code, value: 'ADMIN' }
+              - column: { name: name_ar, value: مشرف }
+              - column: { name: name_en, value: 'Admin' }
+              - column: { name: level, valueNumeric: 13 }
+              - column: { name: active, valueBoolean: true }
+      rollback:
+        - delete:
+            tableName: roles
+            where: code = 'ADMIN'

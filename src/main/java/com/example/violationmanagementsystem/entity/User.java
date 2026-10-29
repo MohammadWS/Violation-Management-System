@@ -10,8 +10,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 10)
-    private String national_id;
+    @Column(name = "national_id", nullable = false, unique = true, length = 10)
+    private String nationalId;
 
     @Column(nullable = false, unique = true, length = 50)
     private String username;
@@ -77,12 +77,12 @@ public class User {
         this.role = role;
     }
 
-    public String getNational_id() {
-        return national_id;
+    public String getNationalId() {
+        return nationalId;
     }
 
-    public void setNational_id(String national_id) {
-        this.national_id = national_id;
+    public void setNationalId(String national_id) {
+        this.nationalId = national_id;
     }
 
     public boolean isEnabled() {
@@ -104,10 +104,11 @@ public class User {
     public User() {
     }
 
-    public User(String username, String password, String email) {
+    public User(String username, String nationalId, String password, String email) {
         this.username = username;
         this.password = password;
         this.email = email;
+        this.nationalId = nationalId;
     }
 
     @Override

@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      author: MohammadWS
+      id: 010-seed-role-operator
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM roles WHERE code = 'OPERATOR'
+      changes:
+        - insert:
+            tableName: roles
+            columns:
+              - column: { name: name_ar, value: معالج }
+              - column: { name: name_en, value: Operator }
+              - column: { name: level, valueNumeric: 5 }
+              - column: { name: active, valueBoolean: true }
+              - column: { name: code, value: OPERATOR }
+      rollback:
+        - delete:
+            tableName: roles
+            where: code = 'OPERATOR'

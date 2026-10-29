@@ -6,12 +6,11 @@ databaseChangeLog:
         - onFail: MARK_RAN
         - sqlCheck:
             expectedResult: 0
-            sql: SELECT COUNT(*) FROM roles WHERE code = 100
+            sql: SELECT COUNT(*) FROM roles WHERE code = 'SYSTEM_ADMIN'
       changes:
         - insert:
             tableName: roles
             columns:
-              - column: { name: code, value: 100 }
               - column: { name: name_ar, value: مدير النظام }
               - column: { name: name_en, value: System Admin }
               - column: { name: level, valueNumeric: 21 }
@@ -20,4 +19,4 @@ databaseChangeLog:
       rollback:
         - delete:
             tableName: roles
-            where: code = 100
+            where: code = 'SYSTEM_ADMIN'

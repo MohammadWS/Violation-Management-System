@@ -15,3 +15,15 @@ databaseChangeLog:
       file: db/changelog/2026/10/007-users-table-role-column-fk.yaml
   - include:
       file: db/changelog/2026/10/008-assign-sysadmin-role.yaml
+  - include:
+      file: db/changelog/2026/10/009-seed-role-admin.yaml
+  - include:
+      file: db/changelog/2026/10/010-seed-role-inspector.yaml
+  - include:
+      file: db/changelog/2026/10/011-seed-role-operator.yaml
+  - include:
+      file: db/changelog/2026/10/012-seed-user-admin.yaml
+  - include:
+      file: db/changelog/2026/10/013-encrypt-admin-user.yaml
+  - include:
+      file: db/changelog/2026/10/014-assing-admin-role.yaml

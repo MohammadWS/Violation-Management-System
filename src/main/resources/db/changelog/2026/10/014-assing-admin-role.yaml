@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      author: MohammadWS
+      id: 014-assign-admin-role
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 1
+            sql: SELECT COUNT(*) FROM users WHERE username = 'admin' AND role_id IS NULL
+      changes:
+        - update:
+            tableName: users
+            columns:
+              - column:
+                  name: role_id
+                  valueComputed: "(SELECT id FROM roles WHERE code = 'ADMIN')"
+            where: username = 'admin'
