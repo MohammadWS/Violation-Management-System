@@ -66,7 +66,6 @@ public class JwtFilter extends OncePerRequestFilter {
 
         } catch (JwtException | IllegalArgumentException | UsernameNotFoundException e) {
             logger.debug("JWT rejected: " + e.getMessage());
-
         }
         filterChain.doFilter(request, response);
     }
